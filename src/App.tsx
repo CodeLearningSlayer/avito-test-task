@@ -1,25 +1,21 @@
 import React, { Suspense, useContext } from "react";
 import { Link, Route, Routes } from "react-router-dom";
-import Counter from "./components/Counter";
-import { MoviePageAsync } from "./pages/MoviePage/MoviePage.async";
-import { MainPageAsync } from "./pages/MainPage/MainPage.async";
-import "./index.scss";
+import { AppRouter } from "../config/router";
+import "./styles/index.scss";
+import DefaultLayout from "./layouts/default";
 
 const App = () => {
-
-
   return (
     <div className="app">
-      <Link to={"/"}> Main </Link>
-      <Link to={"/movies"}> Movie </Link>
       <Suspense>
-        <Routes>
-          <Route path={"/movies"} element={<MoviePageAsync />} />
-          <Route path={"/"} element={<MainPageAsync />} />
-        </Routes>
+        <DefaultLayout>
+          <Routes>
+            {Object.values(AppRouter).map(({ element, path }) => (
+              <Route element={element} path={path} />
+            ))}
+          </Routes>
+        </DefaultLayout>
       </Suspense>
-      <Counter />
-      fuck you
     </div>
   );
 };

@@ -7,7 +7,6 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node",
-    "baseUrl": ".",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
@@ -15,5 +14,12 @@
     "compilerOptions": {
       "module": "CommonJS"
     }
-  }
+  },
+  "include": [
+    "./src/**/*",
+    "./config/**/*.ts",
+    "./config/**/*.tsx",
+    "./webpack.config.ts"
+  ],
+  "extends": "./tsconfig.paths.json"
 }
