@@ -1,0 +1,12 @@
+@import "./reset.scss";
+@import "themes/dark.scss";
+@import "themes/light.scss";
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
+body {
+  font-size: 16px;
+  line-height: 130%;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+}
