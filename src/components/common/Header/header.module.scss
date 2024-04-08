@@ -28,6 +28,9 @@
 .navLink {
   color: var(--color-white);
   font-weight: 500;
+  &_active {
+    border-bottom: 1px solid #fff;
+  }
 }
 
 .navItem {

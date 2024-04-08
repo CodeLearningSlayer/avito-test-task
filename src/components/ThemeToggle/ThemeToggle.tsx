@@ -1,10 +1,14 @@
-import React from "react";
 import "./ThemeToggle.scss";
 
-const ThemeToggle = () => {
+interface Props {
+  onSwitch?: () => void;
+}
+
+const ThemeToggle = ({onSwitch}: Props) => {
+
   return (
     <div className="theme-switch">
-      <input type="checkbox" id="switch" />
+      <input onChange={onSwitch} type="checkbox" id="switch" />
       <label htmlFor="switch">Toggle</label>
     </div>
   );

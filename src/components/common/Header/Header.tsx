@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import ThemeToggle from '@/components/ThemeToggle/ThemeToggle';
+import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import * as classes from "./header.module.scss";
+import { NavLink } from "react-router-dom";
 
 console.log(classes);
 const Header = () => {
@@ -12,14 +12,25 @@ const Header = () => {
           <nav className={classes.nav}>
             <ul className={classes.navList}>
               <li className={classes.navItem}>
-                <Link className={classes.navLink} to="/">Главная</Link>
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? `${classes.navLink_active} ${classes.navLink}` : classes.navLink
+                  }
+                  to="/"
+                >
+                  Главная
+                </NavLink>
               </li>
               <li className={classes.navItem}>
-                <Link className={classes.navLink} to="random">Случайный фильм</Link>
+                <NavLink className={({ isActive }) =>
+                    isActive ? `${classes.navLink_active} ${classes.navLink}` : classes.navLink
+                  } to="/random">
+                  Случайный фильм
+                </NavLink>
               </li>
             </ul>
           </nav>
-        <ThemeToggle />
+          <ThemeToggle />
         </div>
       </div>
     </header>
