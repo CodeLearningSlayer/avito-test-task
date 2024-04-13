@@ -11,7 +11,7 @@ const App = () => {
         <DefaultLayout>
           <Routes>
             {Object.values(AppRouter).map(({ element, path }) => (
-              <Route element={element} path={path} />
+              <Route element={element} path={path} key={path }/>
             ))}
           </Routes>
         </DefaultLayout>

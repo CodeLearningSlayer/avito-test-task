@@ -1,14 +1,16 @@
-import { render } from "react-dom";
-import Counter from "./components/Counter";
 import App from "./App";
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from "react-router-dom";
 import ThemeProvider from "./theme/ThemeProvider";
 
-render(
+const container = document.getElementById("root");
+
+const root = createRoot(container)
+
+root.render(
   <BrowserRouter>
     <ThemeProvider>
       <App></App>
     </ThemeProvider>
   </BrowserRouter>,
-  document.getElementById("root")
 );

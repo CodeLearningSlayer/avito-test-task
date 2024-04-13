@@ -1,0 +1,24 @@
+.homePage {
+  display: grid;
+  grid-template-columns: 1fr 250px;
+  gap: 20px;
+  position: relative;
+}
+
+.homePageInner {
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.loadingOverlay {
+  position: absolute;
+  top: 0px;
+  left: -5px;
+  bottom: 0px;
+  right: 0px;
+  background: #fff;
+  opacity: 0.8;
+  z-index: 20;
+}

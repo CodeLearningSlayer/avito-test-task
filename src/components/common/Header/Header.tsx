@@ -1,4 +1,3 @@
-import ThemeToggle from "@/components/ThemeToggle/ThemeToggle";
 import * as classes from "./header.module.scss";
 import { NavLink } from "react-router-dom";
 
@@ -30,7 +29,6 @@ const Header = () => {
               </li>
             </ul>
           </nav>
-          <ThemeToggle />
         </div>
       </div>
     </header>

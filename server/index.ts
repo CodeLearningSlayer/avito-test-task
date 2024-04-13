@@ -1,12 +1,14 @@
 const express = require("express");
+const cors = require("cors");
+const app = express();
 const { createProxyMiddleware } = require("http-proxy-middleware");
 
-const app = express();
+app.use(cors());
 
 app.use(
   "/api",
   createProxyMiddleware({
-    target: "https://api.kinopoisk.dev/v1.4/",
+    target: "https://api.kinopoisk.dev/",
     changeOrigin: true,
   })
 );
