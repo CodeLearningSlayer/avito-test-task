@@ -34,19 +34,21 @@ const YearFilter = () => {
 
   const transformToQuery = () => {
     return {
-      ...(isStartYearChanged ? {startYear} : {}),
-      ...(isEndYearChanged ? {endYear} : {}),
+      year: `${startYear}-${endYear}`
     };
   };
 
   const { retrieveParams } = useFilter(JSON.stringify([startYear, endYear]), transformToQuery);
 
   useEffect(() => {
-    const startYear = retrieveParams("startYear");
-    const endYear = retrieveParams("endYear");
-    if (startYear && endYear && Number(startYear) && Number(endYear)) {
-      setStartYear(Number(startYear));
-      setEndYear(Number(endYear));
+    const year = retrieveParams("year");
+    if (year) {
+      const startYear = year.split("-")[0];
+      const endYear = year.split("-")[1];
+      if (startYear && endYear && Number(startYear) && Number(endYear)) {
+        setStartYear(Number(startYear));
+        setEndYear(Number(endYear));
+      }
     }
   }, [])
 

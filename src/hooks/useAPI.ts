@@ -1,6 +1,8 @@
 import axios from "axios";
 import type { FilmService } from "@/api/specs/films";
 import { AxiosFilmService } from "@/api/services/films";
+import { PosterService } from "@/api/specs/posters";
+import { AxiosPostersService } from "@/api/services/posters";
 
 export const useAPI = () => {
   const axiosInstance = axios.create({
@@ -12,6 +14,7 @@ export const useAPI = () => {
   });
 
   const filmService: FilmService = new AxiosFilmService(axiosInstance);
+  const posterService: PosterService = new AxiosPostersService(axiosInstance);
 
-  return { filmService };
+  return { filmService, posterService };
 };

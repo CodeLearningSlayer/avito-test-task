@@ -17,10 +17,12 @@ const AgeRatingFilter = () => {
   const [ageRating, setAgeRating] = useState([]);
 
   const transformToParams = () => {
-    if (!!ageRating.length)
-      return {
-        ageRating: getQuery(ageRating),
-      };
+    console.log({
+      ...(!!ageRating.length ? {ageRating: getQuery(ageRating)}: {}),
+    });
+    return {
+      ...(!!ageRating.length ? {ageRating: getQuery(ageRating)}: {ageRating: undefined}),
+    };
   };
 
   const {retrieveParams} = useFilter(ageRating, transformToParams);

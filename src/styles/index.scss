@@ -2,6 +2,7 @@
 @import "./vars.scss";
 @import "themes/dark.scss";
 @import "themes/light.scss";
+@import '@splidejs/react-splide/css';
 
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
 
@@ -31,4 +32,15 @@ body {
   font-weight: 600;
   line-height: 130%;
   margin-bottom: 8px;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0px;
+  left: -5px;
+  bottom: 0px;
+  right: 0px;
+  background: #fff;
+  opacity: 0.8;
+  z-index: 20;
 }

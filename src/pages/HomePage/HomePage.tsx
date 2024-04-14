@@ -4,11 +4,12 @@ import React, { type FC, useState, useRef, useEffect } from "react";
 import FilmGrid from "@/components/FilmGrid/FilmGrid";
 import FilmCard from "@/components/FilmCard/FilmCard";
 import { IMovie } from "@/api/specs/films";
-import {useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { DebounceSelect } from "@/components/SearchField/SelectField";
 import { SearchOutlined } from "@ant-design/icons";
 import * as classes from "./homePage.module.scss";
 import FilterSideBar from "@/components/FilterSideBar/FilterSideBar";
+import { useFilter } from "@/hooks/useFilter";
 
 const { Title } = Typography;
 
@@ -408,36 +409,44 @@ const HomePage: FC = () => {
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
   const [value, setValue] = useState<UserValue>();
   const navigate = useNavigate();
-  const isLoading = useRef(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const isEmptyParams = useRef(true);
+
+  const { getParamsObj } = useFilter(JSON.stringify([page, limit]), () => ({
+    page,
+    limit,
+  }));
 
   useEffect(() => {
-    console.log(searchParams);
+    if (searchParams.size === 0) return; 
+    setIsLoading(true);
+    filmService
+      .GetMovies({ limit, page, ...getParamsObj() })
+      .then((res) => {
+        setMovies(res.docs);
+        setTotalItems(res.total);
+        setPage(res.page);
+        setLimit(res.limit);
+      })
+      .catch((e) => console.log("error ocurred", e))
+      .finally(() => setIsLoading(false));
   }, [searchParams]);
 
-  useEffect(() => {
-    filmService
-      .GetMovies({ limit, page })
-      .then((res) => setMovies(res.docs));
-  }, []);
-  
   const handleLimitChange = async (newLimit: number) => {
-    try {
-      isLoading.current = true;
-      setLimit(newLimit);
-      const movies = await filmService.GetMovies({limit: newLimit, page});
-      setMovies(movies.docs);
-      setTotalPages(movies.pages);
-      setPage(movies.page);
-    } catch(e) {
-      console.log("error ocurred", e);
-    } finally {
-      isLoading.current = false;
-    }
-  }
+    setLimit(newLimit);
+  };
+
+  const handlePageChange = async (newPage: number) => {
+    setPage(newPage);
+    scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
 
   const handleSearch = async (name: string): Promise<UserValue[]> => {
     try {
@@ -448,51 +457,62 @@ const HomePage: FC = () => {
           value: item.id.toString(),
         };
       });
-      // return res.docs;
-    } catch(e) {
+    } catch (e) {
       console.log("error occured", e);
     }
   };
 
   return (
     <>
-    <div className={classes.homePage}>
-      <div className={classes.homePageInner}>
-      <Title level={2} style={{margin: 0}}>Каталог фильмов</Title>
-        <DebounceSelect
-          showSearch
-          value={value}
-          placeholder="Введите название фильма"
-          fetchOptions={handleSearch}
-          suffixIcon={<SearchOutlined/>}
-          onChange={(newValue: UserValue) => {
-            setValue(newValue);
-            navigate(`/movie/${newValue.value}`);
-          }}
-          style={{width: "100%", height: 45}}
-        />
-        <Flex align="center" gap={12}>
-          <div>Фильмов, отображаемых на странице: </div>
-          <Segmented options={["10", "30", "50"]} value={limit.toString()} onChange={(value) => handleLimitChange(+value)} block/>
-        </Flex>
-        <FilmGrid>
-          {!!isLoading.current && <div className={classes.loadingOverlay}></div>}
-          {/* Вынести в отдельную функцию */}
-          {movies.map((item, index) => {
-            return (
-              <React.Fragment key={item.id}>
-                <FilmCard card={item} />
-              </React.Fragment>
-            );
-          })}
-        </FilmGrid>
-      {totalPages > 1 && <Pagination defaultCurrent={page} total={totalPages} showSizeChanger={false} style={{margin: "0 auto"}}/>} 
+      <div className={classes.homePage}>
+        <div className={classes.homePageInner}>
+          <Title level={2} style={{ margin: 0 }}>
+            Каталог фильмов и сериалов
+          </Title>
+          <DebounceSelect
+            showSearch
+            value={value}
+            placeholder="Введите название фильма"
+            fetchOptions={handleSearch}
+            suffixIcon={<SearchOutlined />}
+            onChange={(newValue: UserValue) => {
+              setValue(newValue);
+              navigate(`/movie/${newValue.value}`);
+            }}
+            style={{ width: "100%", height: 45 }}
+          />
+          <Flex align="center" gap={12}>
+            <div>Фильмов, отображаемых на странице: </div>
+            <Segmented
+              options={["10", "30", "50"]}
+              value={limit.toString()}
+              onChange={(value) => handleLimitChange(+value)}
+              block
+            />
+          </Flex>
+          <FilmGrid>
+            {!!isLoading && <div className={classes.loadingOverlay}></div>}
+            {/* Вынести в отдельную функцию */}
+            {movies.map((item, index) => {
+              return (
+                <React.Fragment key={item.id}>
+                  <FilmCard card={item} />
+                </React.Fragment>
+              );
+            })}
+          </FilmGrid>
+          <Pagination
+            defaultCurrent={page}
+            total={totalItems}
+            showSizeChanger={false}
+            style={{ margin: "0 auto" }}
+            onChange={handlePageChange}
+          />
+        </div>
+        <FilterSideBar />
       </div>
-      <FilterSideBar/>
-    </div>
     </>
   );
 };
 
 export default HomePage;
-

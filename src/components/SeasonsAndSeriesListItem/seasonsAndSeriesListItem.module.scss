@@ -1,0 +1,22 @@
+.singleItem {
+  display: flex;
+  gap: 4px;
+}
+
+.singleItem + .singleItem {
+  border-top: 1px solid gray;
+  padding-top: 8px;
+}
+
+.episodeNum {
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.episodeName {
+  flex-grow: 2;
+}
+
+.episodeDate {
+  color: var(--color-grey);
+}

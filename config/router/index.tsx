@@ -9,7 +9,7 @@ export enum AppRoutes {
 
 export const RoutePath: Record<AppRoutes, string> = {
   [AppRoutes.HOME]: "/",
-  [AppRoutes.SINGLE_FILM]: "/:id"
+  [AppRoutes.SINGLE_FILM]: "/movies/:id"
 }
 
 export const AppRouter: Record<AppRoutes, RouteProps> = {

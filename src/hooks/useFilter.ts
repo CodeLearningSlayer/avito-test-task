@@ -8,20 +8,33 @@ export const useFilter = (
   const [searchParams, setSearchParams] = useSearchParams();
 
   const transformParamsToObj = () => {
-    const paramsObj: {[key: string]: any} = {};
+    const paramsObj: { [key: string]: any } = {};
     searchParams.forEach((value, key) => {
-      paramsObj[key] = value;
-    })
+      if (!!value) paramsObj[key] = value;
+    });
 
     return paramsObj;
+  };
+
+  const filterFalsyValues = (obj: Object) => {
+    const newObj: { [key: string]: any } = {};
+    Object.entries(obj).forEach(([key, value]) => {
+      if (!!value) newObj[key] = value;
+    });
+
+    return newObj;
   }
+
+  const getParamsObj = () => {
+    return transformParamsToObj();
+  };
 
   useEffect(() => {
     console.log("UPDATE");
     const obj1 = transformParamsToObj();
     const obj2 = Object.assign({}, obj1, transformFilter());
     setSearchParams({
-      ...obj2, // функция, возвращающая объект параметров
+      ...(filterFalsyValues(obj2)), // функция, возвращающая объект параметров
     });
   }, [filter]);
 
@@ -29,9 +42,10 @@ export const useFilter = (
     if (searchParams.has(queryName)) {
       return searchParams.get(queryName);
     }
-  }
+  };
 
   return {
-    retrieveParams
-  }
+    retrieveParams,
+    getParamsObj,
+  };
 };

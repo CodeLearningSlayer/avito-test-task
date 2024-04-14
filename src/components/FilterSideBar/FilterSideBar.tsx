@@ -4,6 +4,7 @@ import CountryFilter from '@/components/filters/CountryFilter/CountryFilter';
 import AgeRatingFilter from '@/components/filters/AgeRatingFilter/AgeRatingFilter';
 import * as classes from "./filterSidebar.module.scss";
 import { useAPI } from '@/hooks/useAPI';
+import Sidebar from '@/components/common/Sidebar/Sidebar';
 
 interface SidebarProps {
   setMovies: () => void;
@@ -18,11 +19,11 @@ const handleLazySelect = async () => {
 const FilterSideBar: FC = () => {
 
   return (
-    <div className={classes.sidebar}>
+    <Sidebar>
       <YearFilter/>
       <CountryFilter fetchOptions={handleLazySelect}/>
       <AgeRatingFilter/>
-    </div>
+    </Sidebar>
   );
 };
 

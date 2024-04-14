@@ -2,8 +2,11 @@ import { type AxiosInstance, AxiosError } from "axios";
 import type {
   FilmService,
   GetCountriesListResponse,
+  GetMovieByIdResponse,
   GetMoviesListRequest,
   GetMoviesListResponse,
+  GetSeasonsByIdRequest,
+  GetSeasonsByIdResponse
 } from "@/api/specs/films";
 import type {
   SearchMovieByNameRequest,
@@ -49,6 +52,7 @@ export class AxiosFilmService implements FilmService {
   ): Promise<GetMoviesListResponse> {
 
     const params = {
+      ...req,
       ...(req.page ? { page: req.page } : { page: 1 }),
       ...(req.limit ? { limit: req.limit } : { limit: 50 }),
     };
@@ -77,4 +81,19 @@ export class AxiosFilmService implements FilmService {
     const res = await this.instance.get<GetCountriesListResponse>("/v1/movie/possible-values-by-field?field=countries.name");
     return res.data;
   }
-}
+
+  public async GetMovieById(id: string): Promise<GetMovieByIdResponse> {
+    const res = await this.instance.get<GetMovieByIdResponse>(`/v1.4/movie/${id}`);
+    return res.data;
+  }
+
+  public async GetSeasonsById(req: GetSeasonsByIdRequest): Promise<GetSeasonsByIdResponse> {
+    const {limit, page, movieId} = req;
+    const res = await this.instance.get<GetSeasonsByIdResponse>(`/v1.4/season`, {params: {
+      page,
+      limit: 1,
+      movieId
+    }});
+    return res.data;
+  }
+ }

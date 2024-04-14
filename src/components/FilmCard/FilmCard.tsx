@@ -65,7 +65,7 @@ const FilmCard: FC<CardProps> = ({ card }) => {
             src={card.poster.previewUrl}
             alt={card.name}
           />
-          <div className={classes.rating}> <StarFilled/> {card.rating.imdb}</div>
+          <div className={classes.rating}> <StarFilled/> {card.rating.imdb || card.rating.kp}</div>
         </div>
       </Link>
     </Popover>
