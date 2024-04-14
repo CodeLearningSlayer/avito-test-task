@@ -12,22 +12,28 @@ import ActorsList from "@/components/ActorsList/ActorsList";
 import PosterCarousel from "@/components/PosterCarousel/PosterCarousel";
 import { IPoster } from "@/api/specs/posters";
 import SeasonsAndSeriesList from "@/components/SeasonsAndSeriesList/SeasonsAndSeriesList";
+import ReviewsList from "@/components/ReviewsList/ReviewsList";
 
 const MoviePage = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState<IMovieExtended>();
   const [actorsPage, setActorsPage] = useState(1);
   const [posters, setPosters] = useState<IPoster[]>([]);
-  const { filmService, posterService } = useAPI();
+  const { filmService, posterService, reviewsService } = useAPI();
   const [messageApi, contextHolder] = message.useMessage();
   // прописать хук useFetch, чтобы не плодить переменные для состояний
   const [isPostersLoading, setIsPostersLoading] = useState(false);
   const [isSeasonsLoading, setIsSeasonsLoading] = useState(false);
+  const [isReviewsLoading, setIsReviewsLoading] = useState(false);
 
-  const scrollToEl = (id: string) => {
+  const scrollToEl = (
+    id: string,
+    options?: { block: "center" | "start" | "end" }
+  ) => {
     document.getElementById(id).scrollIntoView({
       behavior: "smooth",
       block: "center",
+      ...options,
     });
   };
 
@@ -92,29 +98,48 @@ const MoviePage = () => {
       setIsPostersLoading(true);
       const posters = await posterService.GetPostersByMovieId(movie.id);
       setPosters(posters.docs);
-    } catch(e) {
+    } catch (e) {
       error("Ошибка при подгрузке постеров, перезагрузите страницу");
     } finally {
       setIsPostersLoading(false);
     }
-  }
+  };
 
-  const fetchSeason = async(page: number) => {
+  const fetchSeason = async (page: number) => {
     try {
       setIsSeasonsLoading(true);
-      const res = await filmService.GetSeasonsById({movieId: movie.id, page});
+      const res = await filmService.GetSeasonsById({ movieId: movie.id, page });
       return res;
-    } catch(e) {
+    } catch (e) {
       console.log(e);
     } finally {
       setIsSeasonsLoading(false);
     }
-  }
+  };
+
+  const fetchReviews = async (page: number) => {
+    try {
+      setIsReviewsLoading(true);
+      const res = await reviewsService.GetReviewsByMovieId({
+        movieId: movie.id.toString(),
+        page,
+        limit: 3,
+      });
+      return res;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setIsReviewsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (id) {
       filmService.GetMovieById(id).then((res) => {
         setMovie(res);
+      }).catch(e => {
+        error("Произошла ошибка, перезагрузите страницу");
+        console.log(e);
       });
     }
   }, []);
@@ -147,7 +172,11 @@ const MoviePage = () => {
                 <Button onClick={() => scrollToEl("description")}>
                   Описание
                 </Button>
-                <Button>Отзывы</Button>
+                <Button
+                  onClick={() => scrollToEl("reviews", { block: "start" })}
+                >
+                  Отзывы
+                </Button>
                 <Button onClick={() => scrollToEl("actors")}>Актеры</Button>
               </div>
               <FilmCardExtended movie={movie} onShare={handleShareClick} />
@@ -176,23 +205,43 @@ const MoviePage = () => {
 
               <div>
                 <h2 className={classes.blockTitle}>Постеры</h2>
-                <Spin spinning={isPostersLoading} tip="Загрузка..." size="large" style={{margin: "0 auto", display: "block"}}>
-                  <PosterCarousel posters={posters} fetchPosters={handlePostersIntersect}/>
+                <Spin
+                  spinning={isPostersLoading}
+                  tip="Загрузка..."
+                  size="large"
+                  style={{ margin: "0 auto", display: "block" }}
+                >
+                  <PosterCarousel
+                    posters={posters}
+                    fetchPosters={handlePostersIntersect}
+                  />
                 </Spin>
               </div>
 
-              { movie.isSeries && 
+              {movie.isSeries && (
+                <div>
+                  <Spin spinning={isSeasonsLoading}>
+                    <h2 className={classes.blockTitle}>Сезоны и серии</h2>
+                    <SeasonsAndSeriesList
+                      seasonsInfo={movie.seasonsInfo}
+                      fetchSeasons={fetchSeason}
+                    />
+                  </Spin>
+                </div>
+              )}
+
               <div>
-                <Spin spinning={isSeasonsLoading}>
-                <h2 className={classes.blockTitle}>Сезоны и серии</h2>
-                  <SeasonsAndSeriesList seasonsInfo={movie.seasonsInfo} fetchSeasons={fetchSeason}/>
+                <Spin spinning={isReviewsLoading}>
+                  <h2 className={classes.blockTitle}>Отзывы пользователей</h2>
+                  <ReviewsList fetchReviews={fetchReviews} />
                 </Spin>
               </div>
-              }
             </>
           )}
         </div>
-        <Sidebar></Sidebar>
+        <Sidebar active={false}>
+          <div className={classes.ads}> Реклама может быть) </div>
+        </Sidebar>
       </div>
     </>
   );

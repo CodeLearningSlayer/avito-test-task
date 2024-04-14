@@ -1,0 +1,40 @@
+.reviewWrapper {
+  padding: 10px 0;
+  border-radius: 8px;
+}
+
+.reviewTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px 4px;
+  border-bottom: 1px solid var(--color-grey);
+}
+
+.reviewWrapperPositive {
+  background: rgba(156, 248, 156, 0.438);
+}
+.reviewWrapperNegative {
+  background: rgba(228, 146, 146, 0.555);
+}
+.reviewWrapperNeutral {
+  background: rgba(199, 199, 199, 0.514);
+}
+.review {
+  padding: 8px 10px 0;
+}
+
+.author {
+  flex: 4;
+}
+
+.type {
+  flex: 2;
+  text-align: center;
+  font-weight: 600;
+}
+
+.date {
+  flex: 4;
+  text-align: right;
+}

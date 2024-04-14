@@ -5,6 +5,8 @@ import AgeRatingFilter from '@/components/filters/AgeRatingFilter/AgeRatingFilte
 import * as classes from "./filterSidebar.module.scss";
 import { useAPI } from '@/hooks/useAPI';
 import Sidebar from '@/components/common/Sidebar/Sidebar';
+import { Button } from 'antd';
+import { useSearchParams } from 'react-router-dom';
 
 interface SidebarProps {
   setMovies: () => void;
@@ -16,13 +18,20 @@ const handleLazySelect = async () => {
   return res;
 }
 
-const FilterSideBar: FC = () => {
+const FilterSideBar: FC<{active: boolean}> = ({active}) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const handleResetFilters = () => {
+    setSearchParams({});
+    window.location.reload();
+  }
 
   return (
-    <Sidebar>
+    <Sidebar active={active}>
       <YearFilter/>
       <CountryFilter fetchOptions={handleLazySelect}/>
       <AgeRatingFilter/>
+      <Button onClick={handleResetFilters}>Сбросить фильтры</Button>
     </Sidebar>
   );
 };

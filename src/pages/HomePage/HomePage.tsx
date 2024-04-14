@@ -1,15 +1,16 @@
 import { useAPI } from "@/hooks/useAPI";
-import { Typography, Segmented, Flex, Pagination } from "antd";
+import { Typography, Segmented, Flex, Pagination, Button, message } from "antd";
 import React, { type FC, useState, useRef, useEffect } from "react";
 import FilmGrid from "@/components/FilmGrid/FilmGrid";
 import FilmCard from "@/components/FilmCard/FilmCard";
 import { IMovie } from "@/api/specs/films";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DebounceSelect } from "@/components/SearchField/SelectField";
-import { SearchOutlined } from "@ant-design/icons";
+import { FilterOutlined, SearchOutlined } from "@ant-design/icons";
 import * as classes from "./homePage.module.scss";
 import FilterSideBar from "@/components/FilterSideBar/FilterSideBar";
 import { useFilter } from "@/hooks/useFilter";
+import Icon from "@ant-design/icons/lib/components/Icon";
 
 const { Title } = Typography;
 
@@ -414,7 +415,18 @@ const HomePage: FC = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [sidebarActive, setSidebarActive] = useState(false);
   const isEmptyParams = useRef(true);
+  const [messageApi, contextHolder] = message.useMessage();
+
+
+
+  const error = (messageStr: string) => {
+    message.open({
+      type: "error",
+      content: messageStr,
+    });
+  };
 
   const { getParamsObj } = useFilter(JSON.stringify([page, limit]), () => ({
     page,
@@ -432,7 +444,10 @@ const HomePage: FC = () => {
         setPage(res.page);
         setLimit(res.limit);
       })
-      .catch((e) => console.log("error ocurred", e))
+      .catch((e) => {
+        console.log("error ocurred", e);
+        error("Произошла ошибка, перезагрузите страницу");
+      } )
       .finally(() => setIsLoading(false));
   }, [searchParams]);
 
@@ -462,6 +477,10 @@ const HomePage: FC = () => {
     }
   };
 
+  const handleFilterClick = () => {
+    setSidebarActive(active => !active);
+  }
+
   return (
     <>
       <div className={classes.homePage}>
@@ -489,6 +508,7 @@ const HomePage: FC = () => {
               onChange={(value) => handleLimitChange(+value)}
               block
             />
+            <Button className={classes.filterButton} icon={<FilterOutlined/>} onClick={handleFilterClick}/>
           </Flex>
           <FilmGrid>
             {!!isLoading && <div className={classes.loadingOverlay}></div>}
@@ -509,7 +529,7 @@ const HomePage: FC = () => {
             onChange={handlePageChange}
           />
         </div>
-        <FilterSideBar />
+        <FilterSideBar active={sidebarActive}/>
       </div>
     </>
   );

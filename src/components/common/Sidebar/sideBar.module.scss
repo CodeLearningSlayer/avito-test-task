@@ -8,4 +8,20 @@
   flex-direction: column;
   gap: 12px;
   min-height: 100vh;
+
+  @media (max-width: 860px) {
+    position: absolute;
+    transform: translateY(1000%);
+  }
+}
+
+.sidebarActive {
+  transform: translateY(0);
+  background: white;
+  width: 100%;
+  top: 188px;
+  border-radius: 8px;
+  z-index: 20;
+  padding: 20px;
+  box-shadow: 0px 0px 2px 2px rgb(156, 156, 156);
 }

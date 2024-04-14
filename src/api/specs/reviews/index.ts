@@ -4,7 +4,7 @@ export interface ReviewsService {
 
 export interface GetReviewsByMovieIdRequest {
   page: number;
-  limit: number;
+  limit?: number;
   movieId: string;
 }
 

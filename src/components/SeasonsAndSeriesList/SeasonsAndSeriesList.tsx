@@ -25,7 +25,7 @@ const SeasonsAndSeriesList: FC<SeasonsListProps> = ({
   const [episodesPage, setEpisodesPage] = useState(1);
   const paginationKey = useRef(1);
 
-  const trimVisibleEpisodes= () => {
+  const trimVisibleEpisodes = () => {
     const limit = 10;
     const offset = (episodesPage - 1) * limit;
     const episodesVisible = episodes.slice(offset, offset + limit);

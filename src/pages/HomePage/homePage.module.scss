@@ -3,6 +3,18 @@
   grid-template-columns: 1fr 250px;
   gap: 20px;
   position: relative;
+
+  @media (max-width: 860px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filterButton {
+  display: none !important;
+  @media (max-width: 860px) {
+    display: block !important;
+    flex-shrink: 0 !important;
+  }
 }
 
 .homePageInner {

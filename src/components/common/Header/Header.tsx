@@ -20,13 +20,6 @@ const Header = () => {
                   Главная
                 </NavLink>
               </li>
-              <li className={classes.navItem}>
-                <NavLink className={({ isActive }) =>
-                    isActive ? `${classes.navLink_active} ${classes.navLink}` : classes.navLink
-                  } to="/random">
-                  Случайный фильм
-                </NavLink>
-              </li>
             </ul>
           </nav>
         </div>

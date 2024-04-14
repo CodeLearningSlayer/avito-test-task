@@ -2,6 +2,10 @@
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .poster{
@@ -12,17 +16,29 @@
   height: auto;
   max-width: 250px;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    max-width: 180px;
+  }
+
+  @media (max-width: 640px) {
+    max-width: 220px;
+  }
 }
 
 .cardSpan {
   color: var(--color-grey);
   width: 160px;
   display: block;
+  @media (max-width: 640px) {
+    width: max-content;
+  }
 }
 
 
 .infoListItem {
   display: flex;
+  gap: 12px;
 }
 
 .infoWrapper {

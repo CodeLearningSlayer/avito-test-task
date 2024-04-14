@@ -39,7 +39,7 @@ export class AxiosReviewsService implements ReviewsService {
     const params = new URLSearchParams();
     params.append("movieId", req.movieId);
     params.append("page", req.page.toString());
-    params.append("limit", req.limit.toString());
+    params.append("limit", (req.limit ?? 10).toString());
 
     const res = await this.instance.get<GetReviewsByMovieIdResponse>(`/v1.4/review?${this.querySuffix}`, {params});
     return res.data;

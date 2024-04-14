@@ -14,7 +14,7 @@ const ActorsListItem: FC<ActorsListItemProps> = ({actor}) => {
 
   return (
     <Card className="" hoverable cover={<img className="img" src={actor.photo} alt={actor.name} />}>
-      <Meta title={actor.name} description={actor.description}/>
+      <Meta title={actor.name || "нет информации"} description={actor.description || "нет информации"}/>
     </Card>
   );
 };

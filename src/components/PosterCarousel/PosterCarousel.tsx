@@ -23,7 +23,7 @@ const PosterCarousel: FC<PosterCarouselProps> = ({posters, fetchPosters}) => {
 
   return (
     <div ref={ref}>
-      <Splide options={{
+     {posters.length > 0 ? <Splide options={{
         autoWidth: true,
         autoHeight: true,
         gap: 10,
@@ -38,7 +38,7 @@ const PosterCarousel: FC<PosterCarouselProps> = ({posters, fetchPosters}) => {
           </SplideSlide>
           )
         })}
-      </Splide>
+      </Splide> : <div>Постеров не найдено</div>}
     </div>
   );
 };

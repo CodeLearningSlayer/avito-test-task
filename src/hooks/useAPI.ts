@@ -3,6 +3,8 @@ import type { FilmService } from "@/api/specs/films";
 import { AxiosFilmService } from "@/api/services/films";
 import { PosterService } from "@/api/specs/posters";
 import { AxiosPostersService } from "@/api/services/posters";
+import { ReviewsService } from "@/api/specs/reviews";
+import { AxiosReviewsService } from "@/api/services/reviews";
 
 export const useAPI = () => {
   const axiosInstance = axios.create({
@@ -15,6 +17,7 @@ export const useAPI = () => {
 
   const filmService: FilmService = new AxiosFilmService(axiosInstance);
   const posterService: PosterService = new AxiosPostersService(axiosInstance);
+  const reviewsService: ReviewsService = new AxiosReviewsService(axiosInstance);
 
-  return { filmService, posterService };
+  return { filmService, posterService, reviewsService };
 };
